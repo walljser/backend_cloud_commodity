@@ -6,8 +6,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface GoodMapper {
-    List<Good> getAllByGood(Good good);
-
     int countByExample(GoodExample example);
 
     int deleteByExample(GoodExample example);
