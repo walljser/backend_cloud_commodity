@@ -3,14 +3,14 @@ package com.greyu.ysj.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryExample {
+public class CategoryFirstExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public CategoryExample() {
+    public CategoryFirstExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,63 +104,63 @@ public class CategoryExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andCategoryIdIsNull() {
-            addCriterion("category_id is null");
+        public Criteria andCategoryFirstIdIsNull() {
+            addCriterion("category_first_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIsNotNull() {
-            addCriterion("category_id is not null");
+        public Criteria andCategoryFirstIdIsNotNull() {
+            addCriterion("category_first_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdEqualTo(Integer value) {
-            addCriterion("category_id =", value, "categoryId");
+        public Criteria andCategoryFirstIdEqualTo(Integer value) {
+            addCriterion("category_first_id =", value, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotEqualTo(Integer value) {
-            addCriterion("category_id <>", value, "categoryId");
+        public Criteria andCategoryFirstIdNotEqualTo(Integer value) {
+            addCriterion("category_first_id <>", value, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdGreaterThan(Integer value) {
-            addCriterion("category_id >", value, "categoryId");
+        public Criteria andCategoryFirstIdGreaterThan(Integer value) {
+            addCriterion("category_first_id >", value, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("category_id >=", value, "categoryId");
+        public Criteria andCategoryFirstIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("category_first_id >=", value, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLessThan(Integer value) {
-            addCriterion("category_id <", value, "categoryId");
+        public Criteria andCategoryFirstIdLessThan(Integer value) {
+            addCriterion("category_first_id <", value, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLessThanOrEqualTo(Integer value) {
-            addCriterion("category_id <=", value, "categoryId");
+        public Criteria andCategoryFirstIdLessThanOrEqualTo(Integer value) {
+            addCriterion("category_first_id <=", value, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIn(List<Integer> values) {
-            addCriterion("category_id in", values, "categoryId");
+        public Criteria andCategoryFirstIdIn(List<Integer> values) {
+            addCriterion("category_first_id in", values, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotIn(List<Integer> values) {
-            addCriterion("category_id not in", values, "categoryId");
+        public Criteria andCategoryFirstIdNotIn(List<Integer> values) {
+            addCriterion("category_first_id not in", values, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdBetween(Integer value1, Integer value2) {
-            addCriterion("category_id between", value1, value2, "categoryId");
+        public Criteria andCategoryFirstIdBetween(Integer value1, Integer value2) {
+            addCriterion("category_first_id between", value1, value2, "categoryFirstId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("category_id not between", value1, value2, "categoryId");
+        public Criteria andCategoryFirstIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("category_first_id not between", value1, value2, "categoryFirstId");
             return (Criteria) this;
         }
 

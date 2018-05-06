@@ -3,7 +3,7 @@ package com.greyu.ysj.entity;
 public class Good {
     private Integer goodId;
 
-    private Integer categoryId;
+    private Integer categorySecondId;
 
     private String goodName;
 
@@ -21,23 +21,13 @@ public class Good {
 
     private String origin;
 
-    private Boolean goodStatus;
+    private CategorySecond category;
 
-    private Category category;
-
-    public Boolean getGoodStatus() {
-        return goodStatus;
-    }
-
-    public void setGoodStatus(Boolean goodStatus) {
-        this.goodStatus = goodStatus;
-    }
-
-    public Category getCategory() {
+    public CategorySecond getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategorySecond category) {
         this.category = category;
     }
 
@@ -49,12 +39,12 @@ public class Good {
         this.goodId = goodId;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public Integer getCategorySecondId() {
+        return categorySecondId;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategorySecondId(Integer categorySecondId) {
+        this.categorySecondId = categorySecondId;
     }
 
     public String getGoodName() {
@@ -119,22 +109,5 @@ public class Good {
 
     public void setOrigin(String origin) {
         this.origin = origin == null ? null : origin.trim();
-    }
-
-    @Override
-    public String toString() {
-        return "Good{" +
-                "goodId=" + goodId +
-                ", categoryId=" + categoryId +
-                ", goodName='" + goodName + '\'' +
-                ", image='" + image + '\'' +
-                ", price=" + price +
-                ", originalPrice=" + originalPrice +
-                ", inventory=" + inventory +
-                ", soldCount=" + soldCount +
-                ", spec='" + spec + '\'' +
-                ", origin='" + origin + '\'' +
-                ", category=" + category +
-                '}';
     }
 }

@@ -164,63 +164,63 @@ public class GoodExample {
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIsNull() {
-            addCriterion("category_id is null");
+        public Criteria andCategorySecondIdIsNull() {
+            addCriterion("category_second_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIsNotNull() {
-            addCriterion("category_id is not null");
+        public Criteria andCategorySecondIdIsNotNull() {
+            addCriterion("category_second_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdEqualTo(Integer value) {
-            addCriterion("category_id =", value, "categoryId");
+        public Criteria andCategorySecondIdEqualTo(Integer value) {
+            addCriterion("category_second_id =", value, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotEqualTo(Integer value) {
-            addCriterion("category_id <>", value, "categoryId");
+        public Criteria andCategorySecondIdNotEqualTo(Integer value) {
+            addCriterion("category_second_id <>", value, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdGreaterThan(Integer value) {
-            addCriterion("category_id >", value, "categoryId");
+        public Criteria andCategorySecondIdGreaterThan(Integer value) {
+            addCriterion("category_second_id >", value, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("category_id >=", value, "categoryId");
+        public Criteria andCategorySecondIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("category_second_id >=", value, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLessThan(Integer value) {
-            addCriterion("category_id <", value, "categoryId");
+        public Criteria andCategorySecondIdLessThan(Integer value) {
+            addCriterion("category_second_id <", value, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdLessThanOrEqualTo(Integer value) {
-            addCriterion("category_id <=", value, "categoryId");
+        public Criteria andCategorySecondIdLessThanOrEqualTo(Integer value) {
+            addCriterion("category_second_id <=", value, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdIn(List<Integer> values) {
-            addCriterion("category_id in", values, "categoryId");
+        public Criteria andCategorySecondIdIn(List<Integer> values) {
+            addCriterion("category_second_id in", values, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotIn(List<Integer> values) {
-            addCriterion("category_id not in", values, "categoryId");
+        public Criteria andCategorySecondIdNotIn(List<Integer> values) {
+            addCriterion("category_second_id not in", values, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdBetween(Integer value1, Integer value2) {
-            addCriterion("category_id between", value1, value2, "categoryId");
+        public Criteria andCategorySecondIdBetween(Integer value1, Integer value2) {
+            addCriterion("category_second_id between", value1, value2, "categorySecondId");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("category_id not between", value1, value2, "categoryId");
+        public Criteria andCategorySecondIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("category_second_id not between", value1, value2, "categorySecondId");
             return (Criteria) this;
         }
 
