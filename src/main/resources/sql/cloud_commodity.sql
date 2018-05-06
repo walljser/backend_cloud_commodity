@@ -49,11 +49,22 @@ CREATE TABLE `tb_cart_detail`(
 	CONSTRAINT `FK_cart_good` FOREIGN KEY (`good_id`) REFERENCES `tb_good` (`good_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000000000000 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tb_category`;
-CREATE TABLE `tb_category` (
-	`category_id` int(6) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `tb_category_first`;
+CREATE TABLE `tb_category_first` (
+	`category_first_id` int(6) NOT NULL AUTO_INCREMENT,
 	`category_name` varchar(10) NOT NULL,
-	PRIMARY KEY (`category_id`)
+	PRIMARY KEY (`category_first_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tb_category_second`;
+CREATE TABLE `tb_category_second` (
+	`category_second_id` int(8) NOT NULL AUTO_INCREMENT,
+	`category_first_id` int(6) NOT NULL,
+	`category_name` varchar(10) NOT NULL,
+	`image` varchar(100) NOT NULL,
+	PRIMARY KEY (`category_second_id`),
+	KEY `FK_category_first`,
+	CONSTRAINT `FK_category_first` FOREIGN KEY (`category_first_id`) REFERENCES `tb_category_first` ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tb_good`;
@@ -69,7 +80,7 @@ CREATE TABLE `tb_good` (
 	`spec` varchar(20) NOT NULL,
 	`origin` varchar(10) NOT NULL,
 	PRIMARY KEY (`good_id`),
-	KEY `FK_cateogry_1` (`category_id`),
+	KEY `FK_cateogry_1` (`category_second_id`),
 	CONSTRAINT `FK_category_1` FOREIGN KEY (`category_id`) REFERENCES `tb_category` (`category_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1000000000 DEFAULT CHARSET=utf8;
 
