@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.greyu.ysj.mapper.AdvCategoryMapper" >
-  <resultMap id="BaseResultMap" type="com.greyu.ysj.entity.AdvCategory" >
-    <id column="adv_category_id" property="advCategoryId" jdbcType="INTEGER" />
+<mapper namespace="com.greyu.ysj.mapper.CategorySecondMapper" >
+  <resultMap id="BaseResultMap" type="com.greyu.ysj.entity.CategorySecond" >
+    <id column="category_second_id" property="categorySecondId" jdbcType="INTEGER" />
+    <result column="category_first_id" property="categoryFirstId" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
     <result column="image" property="image" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -64,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    adv_category_id, image
+    category_second_id, category_first_id, category_name, image
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.greyu.ysj.entity.AdvCategoryExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.greyu.ysj.entity.CategorySecondExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_adv_category
+    from tb_category_second
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -83,53 +85,73 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from tb_adv_category
-    where adv_category_id = #{advCategoryId,jdbcType=INTEGER}
+    from tb_category_second
+    where category_second_id = #{categorySecondId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from tb_adv_category
-    where adv_category_id = #{advCategoryId,jdbcType=INTEGER}
+    delete from tb_category_second
+    where category_second_id = #{categorySecondId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.greyu.ysj.entity.AdvCategoryExample" >
-    delete from tb_adv_category
+  <delete id="deleteByExample" parameterType="com.greyu.ysj.entity.CategorySecondExample" >
+    delete from tb_category_second
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.greyu.ysj.entity.AdvCategory" >
-    insert into tb_adv_category (adv_category_id, image)
-    values (#{advCategoryId,jdbcType=INTEGER}, #{image,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.greyu.ysj.entity.CategorySecond" >
+    insert into tb_category_second (category_second_id, category_first_id, 
+      category_name, image)
+    values (#{categorySecondId,jdbcType=INTEGER}, #{categoryFirstId,jdbcType=INTEGER}, 
+      #{categoryName,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.greyu.ysj.entity.AdvCategory" >
-    insert into tb_adv_category
+  <insert id="insertSelective" parameterType="com.greyu.ysj.entity.CategorySecond" >
+    insert into tb_category_second
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="advCategoryId != null" >
-        adv_category_id,
+      <if test="categorySecondId != null" >
+        category_second_id,
+      </if>
+      <if test="categoryFirstId != null" >
+        category_first_id,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
       </if>
       <if test="image != null" >
         image,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="advCategoryId != null" >
-        #{advCategoryId,jdbcType=INTEGER},
+      <if test="categorySecondId != null" >
+        #{categorySecondId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryFirstId != null" >
+        #{categoryFirstId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
       </if>
       <if test="image != null" >
         #{image,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.greyu.ysj.entity.AdvCategoryExample" resultType="java.lang.Integer" >
-    select count(*) from tb_adv_category
+  <select id="countByExample" parameterType="com.greyu.ysj.entity.CategorySecondExample" resultType="java.lang.Integer" >
+    select count(*) from tb_category_second
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update tb_adv_category
+    update tb_category_second
     <set >
-      <if test="record.advCategoryId != null" >
-        adv_category_id = #{record.advCategoryId,jdbcType=INTEGER},
+      <if test="record.categorySecondId != null" >
+        category_second_id = #{record.categorySecondId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryFirstId != null" >
+        category_first_id = #{record.categoryFirstId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryName != null" >
+        category_name = #{record.categoryName,jdbcType=VARCHAR},
       </if>
       <if test="record.image != null" >
         image = #{record.image,jdbcType=VARCHAR},
@@ -140,25 +162,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update tb_adv_category
-    set adv_category_id = #{record.advCategoryId,jdbcType=INTEGER},
+    update tb_category_second
+    set category_second_id = #{record.categorySecondId,jdbcType=INTEGER},
+      category_first_id = #{record.categoryFirstId,jdbcType=INTEGER},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
       image = #{record.image,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.greyu.ysj.entity.AdvCategory" >
-    update tb_adv_category
+  <update id="updateByPrimaryKeySelective" parameterType="com.greyu.ysj.entity.CategorySecond" >
+    update tb_category_second
     <set >
+      <if test="categoryFirstId != null" >
+        category_first_id = #{categoryFirstId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
       <if test="image != null" >
         image = #{image,jdbcType=VARCHAR},
       </if>
     </set>
-    where adv_category_id = #{advCategoryId,jdbcType=INTEGER}
+    where category_second_id = #{categorySecondId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.greyu.ysj.entity.AdvCategory" >
-    update tb_adv_category
-    set image = #{image,jdbcType=VARCHAR}
-    where adv_category_id = #{advCategoryId,jdbcType=INTEGER}
+  <update id="updateByPrimaryKey" parameterType="com.greyu.ysj.entity.CategorySecond" >
+    update tb_category_second
+    set category_first_id = #{categoryFirstId,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR}
+    where category_second_id = #{categorySecondId,jdbcType=INTEGER}
   </update>
 </mapper>

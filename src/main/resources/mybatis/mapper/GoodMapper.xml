@@ -3,7 +3,7 @@
 <mapper namespace="com.greyu.ysj.mapper.GoodMapper" >
   <resultMap id="BaseResultMap" type="com.greyu.ysj.entity.Good" >
     <id column="good_id" property="goodId" jdbcType="INTEGER" />
-    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="category_second_id" property="categorySecondId" jdbcType="INTEGER" />
     <result column="good_name" property="goodName" jdbcType="VARCHAR" />
     <result column="image" property="image" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="DOUBLE" />
@@ -72,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    good_id, category_id, good_name, image, price, original_price, inventory, sold_count, 
-    spec, origin
+    good_id, category_second_id, good_name, image, price, original_price, inventory, 
+    sold_count, spec, origin
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.greyu.ysj.entity.GoodExample" >
     select
@@ -106,11 +106,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.greyu.ysj.entity.Good" >
-    insert into tb_good (good_id, category_id, good_name, 
+    insert into tb_good (good_id, category_second_id, good_name, 
       image, price, original_price, 
       inventory, sold_count, spec, 
       origin)
-    values (#{goodId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{goodName,jdbcType=VARCHAR}, 
+    values (#{goodId,jdbcType=INTEGER}, #{categorySecondId,jdbcType=INTEGER}, #{goodName,jdbcType=VARCHAR}, 
       #{image,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, #{originalPrice,jdbcType=DOUBLE}, 
       #{inventory,jdbcType=INTEGER}, #{soldCount,jdbcType=INTEGER}, #{spec,jdbcType=VARCHAR}, 
       #{origin,jdbcType=VARCHAR})
@@ -121,8 +121,8 @@
       <if test="goodId != null" >
         good_id,
       </if>
-      <if test="categoryId != null" >
-        category_id,
+      <if test="categorySecondId != null" >
+        category_second_id,
       </if>
       <if test="goodName != null" >
         good_name,
@@ -153,8 +153,8 @@
       <if test="goodId != null" >
         #{goodId,jdbcType=INTEGER},
       </if>
-      <if test="categoryId != null" >
-        #{categoryId,jdbcType=INTEGER},
+      <if test="categorySecondId != null" >
+        #{categorySecondId,jdbcType=INTEGER},
       </if>
       <if test="goodName != null" >
         #{goodName,jdbcType=VARCHAR},
@@ -194,8 +194,8 @@
       <if test="record.goodId != null" >
         good_id = #{record.goodId,jdbcType=INTEGER},
       </if>
-      <if test="record.categoryId != null" >
-        category_id = #{record.categoryId,jdbcType=INTEGER},
+      <if test="record.categorySecondId != null" >
+        category_second_id = #{record.categorySecondId,jdbcType=INTEGER},
       </if>
       <if test="record.goodName != null" >
         good_name = #{record.goodName,jdbcType=VARCHAR},
@@ -229,7 +229,7 @@
   <update id="updateByExample" parameterType="map" >
     update tb_good
     set good_id = #{record.goodId,jdbcType=INTEGER},
-      category_id = #{record.categoryId,jdbcType=INTEGER},
+      category_second_id = #{record.categorySecondId,jdbcType=INTEGER},
       good_name = #{record.goodName,jdbcType=VARCHAR},
       image = #{record.image,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DOUBLE},
@@ -245,8 +245,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.greyu.ysj.entity.Good" >
     update tb_good
     <set >
-      <if test="categoryId != null" >
-        category_id = #{categoryId,jdbcType=INTEGER},
+      <if test="categorySecondId != null" >
+        category_second_id = #{categorySecondId,jdbcType=INTEGER},
       </if>
       <if test="goodName != null" >
         good_name = #{goodName,jdbcType=VARCHAR},
@@ -277,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.greyu.ysj.entity.Good" >
     update tb_good
-    set category_id = #{categoryId,jdbcType=INTEGER},
+    set category_second_id = #{categorySecondId,jdbcType=INTEGER},
       good_name = #{goodName,jdbcType=VARCHAR},
       image = #{image,jdbcType=VARCHAR},
       price = #{price,jdbcType=DOUBLE},
