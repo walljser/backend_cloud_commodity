@@ -6,10 +6,10 @@ import com.github.pagehelper.PageInfo;
 import com.greyu.ysj.authorization.annotation.Authorization;
 import com.greyu.ysj.config.Constants;
 import com.greyu.ysj.config.ResultStatus;
-import com.greyu.ysj.entity.Category;
+import com.greyu.ysj.entity.CategorySecond;
 import com.greyu.ysj.entity.Good;
 import com.greyu.ysj.entity.GoodExample;
-import com.greyu.ysj.mapper.CategoryMapper;
+import com.greyu.ysj.mapper.CategorySecondMapper;
 import com.greyu.ysj.mapper.GoodMapper;
 import com.greyu.ysj.model.ResultModel;
 import com.greyu.ysj.service.GoodService;
@@ -29,7 +29,7 @@ public class GoodServiceImpl implements GoodService {
     private GoodMapper goodMapper;
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private CategorySecondMapper categorySecondMapper;
 
     @Override
     public PageInfo<Good> getAll(Integer page, Integer rows, Good good, Boolean goodStatus) {
@@ -52,8 +52,8 @@ public class GoodServiceImpl implements GoodService {
             criteria.andGoodIdEqualTo(good.getGoodId());
         }
 
-        if (null != good.getCategoryId()) {
-            criteria.andCategoryIdEqualTo(good.getCategoryId());
+        if (null != good.getCategorySecondId()) {
+            criteria.andCategorySecondIdEqualTo(good.getCategorySecondId());
         }
 
         if (null != good.getGoodName()) {
@@ -66,8 +66,8 @@ public class GoodServiceImpl implements GoodService {
 //        List<Good> list = this.goodMapper.getAllByGood(good);
         List<Good> list = this.goodMapper.selectByExample(goodExample);
         for (Good g: list) {
-            Category category = this.categoryMapper.selectByPrimaryKey(g.getCategoryId());
-            g.setCategory(category);
+            CategorySecond categorySecond = this.categorySecondMapper.selectByPrimaryKey(g.getCategorySecondId());
+            g.setCategory(categorySecond);
             g.setImage(Constants.IMAGE_PREFIX_URL + g.getImage());
         }
         PageInfo<Good> pageInfo = new PageInfo<Good>(list);
@@ -91,8 +91,8 @@ public class GoodServiceImpl implements GoodService {
             criteria.andGoodIdEqualTo(good.getGoodId());
         }
 
-        if (null != good.getCategoryId()) {
-            criteria.andCategoryIdEqualTo(good.getCategoryId());
+        if (null != good.getCategorySecondId()) {
+            criteria.andCategorySecondIdEqualTo(good.getCategorySecondId());
         }
 
         if (null != good.getGoodName()) {
@@ -118,8 +118,8 @@ public class GoodServiceImpl implements GoodService {
         GoodExample goodExample = new GoodExample();
         GoodExample.Criteria criteria = goodExample.createCriteria();
 
-        if (null != good.getCategoryId()) {
-            criteria.andCategoryIdEqualTo(good.getCategoryId());
+        if (null != good.getCategorySecondId()) {
+            criteria.andCategorySecondIdEqualTo(good.getCategorySecondId());
         }
 
         List<Good> goodList = this.goodMapper.selectByExample(goodExample);
@@ -152,7 +152,7 @@ public class GoodServiceImpl implements GoodService {
     public Good getOne(Integer goodId) {
         Good good = this.goodMapper.selectByPrimaryKey(goodId);
         good.setImage(Constants.IMAGE_PREFIX_URL + good.getImage());
-        Category category = this.categoryMapper.selectByPrimaryKey(good.getCategoryId());
+        CategorySecond category = this.categorySecondMapper.selectByPrimaryKey(good.getCategorySecondId());
         good.setCategory(category);
         return good;
     }
@@ -161,7 +161,7 @@ public class GoodServiceImpl implements GoodService {
     public ResultModel save(Good good) {
         System.out.println(good);
         // 除了 categoryId 其他字段都不能为空
-        if (null == good.getGoodName() || null == good.getCategoryId() ||
+        if (null == good.getGoodName() || null == good.getCategorySecondId() ||
                 null == good.getPrice() || null == good.getImage() ||
                 null == good.getOrigin() || null == good.getSpec()) {
             return ResultModel.error(ResultStatus.DATA_NOT_NULL);
@@ -220,11 +220,11 @@ public class GoodServiceImpl implements GoodService {
             newGood.setGoodName(good.getGoodName());
         }
 
-        if (null != good.getCategoryId()) {
-            Category category = this.categoryMapper.selectByPrimaryKey(good.getCategoryId());
+        if (null != good.getCategorySecondId()) {
+            CategorySecond category = this.categorySecondMapper.selectByPrimaryKey(good.getCategorySecondId());
 
             if (null != category) {
-                newGood.setCategoryId(good.getCategoryId());
+                newGood.setCategorySecondId(good.getCategorySecondId());
             }
         }
 

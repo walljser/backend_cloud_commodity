@@ -57,8 +57,7 @@ public class OrderController {
 
     @RequestMapping(value = "/user/v1/user/{userId}/order", method = RequestMethod.POST)
     @Authorization
-    public ResponseEntity<ResultModel> createOrder(@PathVariable Integer userId, Order order, Integer[] goodIds) {
-        System.out.println(order);
+    public ResponseEntity<ResultModel> createOrder(@PathVariable Integer userId, Integer addressId, Integer[] goodIds) {
         for (Integer id : goodIds) {
             System.out.println(id);
         }

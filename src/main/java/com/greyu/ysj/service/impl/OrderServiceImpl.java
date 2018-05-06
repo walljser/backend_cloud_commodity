@@ -95,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResultModel create(Order order, Good good) {
+    public ResultModel create(Integer userId, Integer addressId, Integer[] categoryDetailIds) {
         return null;
     }
 

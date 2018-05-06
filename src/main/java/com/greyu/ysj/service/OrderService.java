@@ -19,7 +19,7 @@ public interface OrderService {
 
     ResultModel getOneOrder(Long orderId);
 
-    ResultModel create(Order order, Good good);
+    ResultModel create(Integer userId, Integer addressId, Integer[] cartDetailIds);
 
     ResultModel updateOrder(Order order);
 
