@@ -65,7 +65,7 @@ CREATE TABLE `tb_category_second` (
 	PRIMARY KEY (`category_second_id`),
 	KEY `FK_category_first`,
 	CONSTRAINT `FK_category_first` FOREIGN KEY (`category_first_id`) REFERENCES `tb_category_first` ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10000000 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tb_good`;
 CREATE TABLE `tb_good` (

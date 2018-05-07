@@ -9,6 +9,16 @@ public class CategorySecond {
 
     private String image;
 
+    private String categoryFirstName;
+
+    public String getCategoryFirstName() {
+        return categoryFirstName;
+    }
+
+    public void setCategoryFirstName(String categoryFirstName) {
+        this.categoryFirstName = categoryFirstName;
+    }
+
     public Integer getCategorySecondId() {
         return categorySecondId;
     }
@@ -38,6 +48,17 @@ public class CategorySecond {
     }
 
     public void setImage(String image) {
-        this.image = image == null ? null : image.trim();
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "CategorySecond{" +
+                "categorySecondId=" + categorySecondId +
+                ", categoryFirstId=" + categoryFirstId +
+                ", categoryName='" + categoryName + '\'' +
+                ", image='" + image + '\'' +
+                ", categoryFirstName='" + categoryFirstName + '\'' +
+                '}';
     }
 }

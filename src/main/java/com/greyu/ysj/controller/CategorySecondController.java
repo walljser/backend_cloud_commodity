@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  * @Author: gre_yu@163.com
  * @Date: Created in 23:26 2018/5/6.
  */
+@RestController
 public class CategorySecondController {
     @Autowired
     private CategorySecondService categorySecondService;
@@ -52,6 +54,9 @@ public class CategorySecondController {
     @RequestMapping(value = "/admin/v1/category/second", method = RequestMethod.POST)
     @Authorization
     public ResponseEntity<ResultModel> addCategory(Integer categoryFirstId, String categoryName, MultipartFile imageFile) {
+        System.out.println(categoryFirstId);
+        System.out.println(categoryName);
+        System.out.println(imageFile);
         if (categoryName == null || categoryFirstId == null || imageFile == null) {
             return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.DATA_NOT_NULL), HttpStatus.BAD_REQUEST);
         }
@@ -69,13 +74,22 @@ public class CategorySecondController {
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/admin/v1/category/second/{categorySecondId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/admin/v1/category/second/{categorySecondId}", method = RequestMethod.POST)
     @Authorization
-    public ResponseEntity<ResultModel> updateCategory(@PathVariable Integer categorySecondId, CategorySecond categorySecond, MultipartFile imageFile) {
-        if (null == categorySecond.getCategoryName() ||
-                null == categorySecond.getCategoryFirstId()) {
+    public ResponseEntity<ResultModel> updateCategory(@PathVariable Integer categorySecondId, Integer categoryFirstId, String categoryName, MultipartFile imageFile) {
+        System.out.println(categoryFirstId);
+        System.out.println(categorySecondId);
+        System.out.println(categoryName);
+        System.out.println(imageFile);
+        if (null == categoryName ||
+                null == categoryFirstId) {
             return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.DATA_NOT_NULL), HttpStatus.BAD_REQUEST);
         }
+
+        CategorySecond categorySecond = new CategorySecond();
+        categorySecond.setCategoryName(categoryName);
+        categorySecond.setCategoryFirstId(categoryFirstId);
+        categorySecond.setCategorySecondId(categorySecondId);
 
         ResultModel resultModel = this.categorySecondService.update(categorySecondId, categorySecond, imageFile);
 
@@ -86,9 +100,10 @@ public class CategorySecondController {
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/v1/categories/{categorySecondId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/v1/category/second/{categorySecondId}", method = RequestMethod.DELETE)
     @Authorization
     public ResponseEntity<ResultModel> deleteCategory(@PathVariable Integer categorySecondId) {
+        System.out.println("delete");
         ResultModel resultModel = this.categorySecondService.delete(categorySecondId);
 
         if (resultModel.getCode() == -1002) {

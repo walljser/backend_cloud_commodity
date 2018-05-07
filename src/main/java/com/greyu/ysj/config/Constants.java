@@ -28,6 +28,6 @@ public class Constants {
 
     public static final String AVATAR_PREFIX_URL = "http://119.29.161.228/cloudimg/avatars";
 
-//    public static final String IMAGE_SAVE_PATH = "D:\\test_image";
-    public static final String IMAGE_SAVE_PATH = "/var/www/html/cloudimg/goods/";
+    public static final String IMAGE_SAVE_PATH = "D:\\test_image";
+//    public static final String IMAGE_SAVE_PATH = "/var/www/html/cloudimg/goods/";
 }

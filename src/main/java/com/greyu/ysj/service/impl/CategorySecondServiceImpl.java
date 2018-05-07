@@ -3,9 +3,11 @@ package com.greyu.ysj.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.greyu.ysj.config.Constants;
 import com.greyu.ysj.config.ResultStatus;
+import com.greyu.ysj.entity.CategoryFirst;
 import com.greyu.ysj.entity.CategorySecond;
 import com.greyu.ysj.entity.CategorySecondExample;
 import com.greyu.ysj.entity.GoodExample;
+import com.greyu.ysj.mapper.CategoryFirstMapper;
 import com.greyu.ysj.mapper.CategorySecondMapper;
 import com.greyu.ysj.mapper.GoodMapper;
 import com.greyu.ysj.model.ResultModel;
@@ -24,6 +26,9 @@ import java.util.List;
  */
 @Service
 public class CategorySecondServiceImpl implements CategorySecondService {
+    @Autowired
+    private CategoryFirstMapper categoryFirstMapper;
+
     @Autowired
     private CategorySecondMapper categorySecondMapper;
 
@@ -56,6 +61,11 @@ public class CategorySecondServiceImpl implements CategorySecondService {
 
         CategorySecondExample categoryExample = new CategorySecondExample();
         List<CategorySecond> list = this.categorySecondMapper.selectByExample(categoryExample);
+        for (CategorySecond category: list) {
+            category.setImage(Constants.IMAGE_PREFIX_URL + category.getImage());
+            CategoryFirst categoryFirst = this.categoryFirstMapper.selectByPrimaryKey(category.getCategoryFirstId());
+            category.setCategoryFirstName(categoryFirst.getCategoryName());
+        }
 
         return list;
     }
@@ -143,27 +153,21 @@ public class CategorySecondServiceImpl implements CategorySecondService {
             return ResultModel.error(ResultStatus.DATA_NOT_NULL);
         }
 
-        CategorySecond newCategory = this.categorySecondMapper.selectByPrimaryKey(categorySecondId);
+        CategorySecond oldCategory = this.categorySecondMapper.selectByPrimaryKey(categorySecondId);
 
-        if (null == newCategory) {
+        if (null == oldCategory) {
             return ResultModel.error(ResultStatus.CATEGORY_NOT_FOUND);
         }
 
         // 分类名称已存在
-        CategorySecondExample categorySecondExample = new CategorySecondExample();
-        CategorySecondExample.Criteria criteria = categorySecondExample.createCriteria();
-        criteria.andCategoryNameEqualTo(categorySecond.getCategoryName());
-        try {
-            newCategory = this.categorySecondMapper.selectByExample(categorySecondExample).get(0);
-        } catch (Exception e) {
-            newCategory = null;
-        }
-        if (null != newCategory && newCategory.getCategorySecondId() != categorySecondId) {
+        CategorySecond existsCategory = this.selectByCategoryName(categorySecond.getCategoryName());
+
+        if (null != existsCategory && existsCategory.getCategorySecondId() != categorySecond.getCategorySecondId()) {
             return ResultModel.error(ResultStatus.CAETGORY_NAME_HAS_EXISTS);
         }
 
         // 设置图片名称
-        String fileName = newCategory.getImage();
+        String fileName = oldCategory.getImage();
         if (null != imageFile) {
             try {
                 fileName = FileUtil.upload(imageFile, Constants.IMAGE_SAVE_PATH);

@@ -55,6 +55,13 @@ public class CategoryFirstServiceImpl implements CategoryFirstService {
 
         CategoryFirstExample categoryExample = new CategoryFirstExample();
         List<CategoryFirst> list = this.categoryFirstMapper.selectByExample(categoryExample);
+        for (CategoryFirst category: list) {
+            CategorySecondExample categorySecondExample = new CategorySecondExample();
+            CategorySecondExample.Criteria criteria = categorySecondExample.createCriteria();
+            criteria.andCategoryFirstIdEqualTo(category.getCategoryFirstId());
+            List<CategorySecond> seconds = this.categorySecondMapper.selectByExample(categorySecondExample);
+            category.setCategorySeconds(seconds);
+        }
 
         return list;
     }
@@ -102,7 +109,7 @@ public class CategoryFirstServiceImpl implements CategoryFirstService {
 
         CategorySecondExample categorySecondExample = new CategorySecondExample();
         CategorySecondExample.Criteria criteria = categorySecondExample.createCriteria();
-        criteria.andCategorySecondIdEqualTo(categoryId);
+        criteria.andCategoryFirstIdEqualTo(categoryId);
 
         Integer count = this.categorySecondMapper.countByExample(categorySecondExample);
 

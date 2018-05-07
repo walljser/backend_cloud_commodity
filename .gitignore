@@ -20,5 +20,6 @@ nbproject/private/
 build/
 nbbuild/
 dist/
+data/tmp/
 nbdist/
 .nb-gradle/

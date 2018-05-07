@@ -110,4 +110,21 @@ public class Good {
     public void setOrigin(String origin) {
         this.origin = origin == null ? null : origin.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Good{" +
+                "goodId=" + goodId +
+                ", categorySecondId=" + categorySecondId +
+                ", goodName='" + goodName + '\'' +
+                ", image='" + image + '\'' +
+                ", price=" + price +
+                ", originalPrice=" + originalPrice +
+                ", inventory=" + inventory +
+                ", soldCount=" + soldCount +
+                ", spec='" + spec + '\'' +
+                ", origin='" + origin + '\'' +
+                ", category=" + category +
+                '}';
+    }
 }
