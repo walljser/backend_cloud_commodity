@@ -101,7 +101,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.greyu.ysj.entity.Order" >
+  <insert id="insert"
+          useGeneratedKeys="true"
+          keyProperty="orderId"
+          parameterType="com.greyu.ysj.entity.Order" >
     insert into tb_order (order_id, user_id, address_id, 
       amount, create_time, remarks, 
       status)

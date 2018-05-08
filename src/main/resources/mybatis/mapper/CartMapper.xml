@@ -110,7 +110,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.greyu.ysj.entity.Cart" >
+  <insert id="insert"
+          useGeneratedKeys="true"
+          keyProperty="cartId"
+          parameterType="com.greyu.ysj.entity.Cart" >
     insert into tb_cart (cart_id, user_id, amount
       )
     values (#{cartId,jdbcType=BIGINT}, #{userId,jdbcType=INTEGER}, #{amount,jdbcType=DOUBLE}
