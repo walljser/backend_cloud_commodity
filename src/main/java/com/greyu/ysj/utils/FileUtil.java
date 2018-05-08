@@ -30,6 +30,7 @@ public class FileUtil {
         }
         Files.copy(file.getInputStream(), Paths.get(path, newFileName));
         System.out.println(path);
+        Runtime.getRuntime().exec("chmod 755 /var/www/html/cloudimg/goods/" + newFileName);
         return newFileName;
     }
 
