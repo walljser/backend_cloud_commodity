@@ -55,6 +55,13 @@ public class CartController {
 //        }
 
         ResultModel resultModel = this.cartService.save(userId, goodId, count);
+
+        if (resultModel.getCode() == -1002) {
+            return new ResponseEntity<ResultModel>(resultModel, HttpStatus.NOT_FOUND);
+        }
+        if (resultModel.getCode() == -1004) {
+            return new ResponseEntity<ResultModel>(resultModel, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.CREATED);
     }
 

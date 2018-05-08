@@ -114,6 +114,10 @@ public class CartServiceImpl implements CartService{
             return ResultModel.error(ResultStatus.GOOD_NOT_FOUND);
         }
 
+        if (good.getInventory() < count) {
+            return ResultModel.error(ResultStatus.GOOD_INSUFFICIENT);
+        }
+
         // 读取数据库中该用户的的购物车信息
         CartExample cartExample = new CartExample();
         CartExample.Criteria criteria = cartExample.createCriteria();
@@ -132,8 +136,6 @@ public class CartServiceImpl implements CartService{
             cart.setAmount(0.0);
             // 新建购物车
             this.cartMapper.insert(cart);
-            // 获取刚插入的购物车信息
-            cart = this.cartMapper.selectByExample(cartExample).get(0);
         }
 
         CartDetailExample cartDetailExample = new CartDetailExample();

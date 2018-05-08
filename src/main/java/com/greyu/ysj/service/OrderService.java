@@ -19,9 +19,19 @@ public interface OrderService {
 
     ResultModel getOneOrder(Long orderId);
 
-    ResultModel create(Integer userId, Integer addressId, Integer[] cartDetailIds);
+    ResultModel create(Integer userId, Integer addressId, String remarks, Long cartDetailIds[]);
 
     ResultModel updateOrder(Order order);
 
-    ResultModel delete(Integer orderId);
+    ResultModel delete(Long orderId);
+
+    ResultModel refund(Long orderId);
+
+    ResultModel confirm(Long orderId);
+
+    ResultModel confirmRefund(Long orderId);
+
+    ResultModel refuseRefund(Long orderId);
+
+    ResultModel deliver(Long orderId);
 }

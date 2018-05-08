@@ -30,4 +30,34 @@ public class Constants {
 
     public static final String IMAGE_SAVE_PATH = "D:\\test_image";
 //    public static final String IMAGE_SAVE_PATH = "/var/www/html/cloudimg/goods/";
+
+    /**
+     * 订单待发货状态
+     */
+    public static final int ORDER_WAIT = 0;
+
+    /**
+     * 订单配送中状态
+     */
+    public static final int ORDER_DISPATCHING = 1;
+
+    /**
+     * 订单确认送达状态
+     */
+    public static final int ORDER_FINISH = 2;
+
+    /**
+     * 订单退款中状态
+     */
+    public static final int ORDER_REFUNDING = 3;
+
+    /**
+     * 订单退款完成
+     */
+    public static final int ORDER_REFUND_SUCCESS = -1;
+
+    /**
+     * 订单退款失败
+     */
+    public static final int ORDER_REFUNDING_FAILURE = -2;
 }
