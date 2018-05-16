@@ -5,14 +5,15 @@ import com.greyu.ysj.config.ResultStatus;
 import com.greyu.ysj.entity.Order;
 import com.greyu.ysj.model.ResultModel;
 import com.greyu.ysj.service.OrderService;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,10 +30,19 @@ public class OrderController {
     @Authorization
     public ResponseEntity<ResultModel> getAllOrders(Integer page, Integer rows,
                                                    String orderBy, Order order,
-                                                   Double start, Double end ) {
-        List<Order> orders = this.orderService.getAllOrders(page, rows, orderBy, order, start, end);
+                                                   String start, String end,
+                                                   String userName) {
+        List<Order> orders = this.orderService.getAllOrders(page, rows, orderBy, order, userName, start, end);
 
         return new ResponseEntity<ResultModel>(ResultModel.ok(orders),HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/v1/statistics/order", method = RequestMethod.GET)
+    @Authorization
+    public ResponseEntity<ResultModel> orderCount() {
+        System.out.println(6666);
+        ResultModel resultModel = this.orderService.orderStatistics();
+        return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/v1/order/{orderId}", method = RequestMethod.GET)
@@ -49,14 +59,15 @@ public class OrderController {
 
     @RequestMapping(value = "/user/v1/user/{userId}/order", method = RequestMethod.GET)
     @Authorization
-    public ResponseEntity<ResultModel> getOrderByUserId(@PathVariable Integer userId) {
-        ResultModel resultModel = this.orderService.getOrderByUserId(userId);
+    public ResponseEntity<ResultModel> getOrderByUserId(@PathVariable Integer userId, Integer status) {
+        System.out.println(status);
+        ResultModel resultModel = this.orderService.getOrderByUserId(userId ,status);
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/v1/user/{userId}/order", method = RequestMethod.POST)
     @Authorization
-    public ResponseEntity<ResultModel> createOrder(@PathVariable Integer userId, Integer addressId, String remarks, Long cartDetailIds[]) {
+    public ResponseEntity<ResultModel> createOrder(@PathVariable Integer userId, Integer addressId, String remarks, String cartDetailIds) {
         if (null == userId ||
                 null == addressId ||
                 null == cartDetailIds) {
@@ -77,13 +88,12 @@ public class OrderController {
 
     /**
      * 发货
-     * @param userId
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/admin/v1/user/{userId}/order/deliver/{orderId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/admin/v1/order/{orderId}/deliver", method = RequestMethod.PATCH)
     @Authorization
-    public ResponseEntity<ResultModel> deliver(@PathVariable Integer userId, @PathVariable Long orderId) {
+    public ResponseEntity<ResultModel> deliver(@PathVariable Long orderId) {
         ResultModel resultModel = this.orderService.deliver(orderId);
 
         if (resultModel.getCode() == -1002) {
@@ -95,13 +105,12 @@ public class OrderController {
 
     /**
      * 配送完成
-     * @param userId
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/admin/v1/user/{userId}/order/confirm/{orderId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/admin/v1/order/{orderId}/confirm", method = RequestMethod.PATCH)
     @Authorization
-    public ResponseEntity<ResultModel> confirm(@PathVariable Integer userId, @PathVariable Long orderId) {
+    public ResponseEntity<ResultModel> confirm(@PathVariable Long orderId) {
         ResultModel resultModel = this.orderService.confirm(orderId);
 
         if (resultModel.getCode() == -1002) {
@@ -113,13 +122,12 @@ public class OrderController {
 
     /**
      * 拒绝退款
-     * @param userId
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/admin/v1/user/{userId}/order/refund/{orderId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/v1/order/{orderId}/refuse", method = RequestMethod.PATCH)
     @Authorization
-    public ResponseEntity<ResultModel> refuseRefund(@PathVariable Integer userId, @PathVariable Long orderId) {
+    public ResponseEntity<ResultModel> refuseRefund(@PathVariable Long orderId) {
         ResultModel resultModel = this.orderService.refuseRefund(orderId);
 
         if (resultModel.getCode() == -1002) {
@@ -131,13 +139,12 @@ public class OrderController {
 
     /**
      * 申请退款
-     * @param userId
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/user/v1/user/{userId}/order/refund/{orderId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/v1/order/{orderId}/refund", method = RequestMethod.POST)
     @Authorization
-    public ResponseEntity<ResultModel> refund(@PathVariable Integer userId, @PathVariable Long orderId) {
+    public ResponseEntity<ResultModel> refund(@PathVariable Long orderId) {
         ResultModel resultModel = this.orderService.refund(orderId);
 
         if (resultModel.getCode() == -1002) {
@@ -148,14 +155,13 @@ public class OrderController {
     }
 
     /**
-     * 确认退款
-     * @param userId
+     * 同意退款
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/admin/v1/user/{userId}/order/{orderId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/v1/order/{orderId}/refund", method = RequestMethod.DELETE)
     @Authorization
-    public ResponseEntity<ResultModel> confirmRefund(@PathVariable Integer userId, @PathVariable Long orderId) {
+    public ResponseEntity<ResultModel> confirmRefund(@PathVariable Long orderId) {
         ResultModel resultModel = this.orderService.confirmRefund(orderId);
 
         if (resultModel.getCode() == -1002) {

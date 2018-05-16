@@ -89,8 +89,16 @@ public class AddressController {
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/{userId}/address/{addressId}", method = RequestMethod.PATCH)
+    /**
+     * 修改地址信息
+     * @param userId
+     * @param addressId
+     * @param address
+     * @return
+     */
+    @RequestMapping(value = "/{userId}/address/{addressId}", method = RequestMethod.POST)
     public ResponseEntity<ResultModel> updateAddress(@PathVariable Integer userId, @PathVariable Integer addressId, Address address) {
+        System.out.println(address);
         ResultModel resultModel = this.addressService.update(address);
 
         if (resultModel.getCode() == -1002) {

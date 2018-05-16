@@ -26,6 +26,16 @@ public class Order {
 
     private List<OrderDetail> orderDetails;
 
+    private Address address;
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;
     }

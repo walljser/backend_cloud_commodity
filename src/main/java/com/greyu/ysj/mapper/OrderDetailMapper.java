@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderDetailMapper {
+    List<OrderDetail> getAll();
+
+    List<OrderDetail> getAllByOrderId(Long orderId);
+
     int countByExample(OrderDetailExample example);
 
     int deleteByExample(OrderDetailExample example);

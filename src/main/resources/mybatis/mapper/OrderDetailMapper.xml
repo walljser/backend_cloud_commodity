@@ -7,6 +7,24 @@
     <result column="good_id" property="goodId" jdbcType="INTEGER" />
     <result column="count" property="count" jdbcType="INTEGER" />
   </resultMap>
+  <resultMap id="OrderDetailMap" type="com.greyu.ysj.entity.OrderDetail" >
+    <id column="order_detail_id" property="orderDetailId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="good_id" property="goodId" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <collection property="good" ofType="com.greyu.ysj.entity.Good">
+      <id column="good_id" property="goodId" jdbcType="INTEGER" />
+      <result column="category_second_id" property="categorySecondId" jdbcType="INTEGER" />
+      <result column="good_name" property="goodName" jdbcType="VARCHAR" />
+      <result column="image" property="image" jdbcType="VARCHAR" />
+      <result column="price" property="price" jdbcType="DOUBLE" />
+      <result column="original_price" property="originalPrice" jdbcType="DOUBLE" />
+      <result column="inventory" property="inventory" jdbcType="INTEGER" />
+      <result column="sold_count" property="soldCount" jdbcType="INTEGER" />
+      <result column="spec" property="spec" jdbcType="VARCHAR" />
+      <result column="origin" property="origin" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -193,4 +211,14 @@
       count = #{count,jdbcType=INTEGER}
     where order_detail_id = #{orderDetailId,jdbcType=BIGINT}
   </update>
+  <select id="getAll" resultMap="OrderDetailMap">
+    select *
+    from tb_order_detail a, tb_good b
+    where a.good_id = b.good_id
+  </select>
+  <select id="getAllByOrderId" parameterType="Long" resultMap="OrderDetailMap">
+    select *
+     from tb_order_detail a, tb_good b
+     where a.good_id = b.good_id and a.order_id = #{orderId, jdbcType=INTEGER}
+  </select>
 </mapper>

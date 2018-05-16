@@ -6,6 +6,7 @@ import com.greyu.ysj.config.ResultStatus;
 import com.greyu.ysj.entity.*;
 import com.greyu.ysj.mapper.*;
 import com.greyu.ysj.model.ResultModel;
+import com.greyu.ysj.model.StatisticsOrder;
 import com.greyu.ysj.service.OrderService;
 import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.Result;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,8 +42,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CartDetailMapper cartDetailMapper;
 
+    @Autowired
+    private AddressMapper addressMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
-    public List<Order> getAllOrders(Integer page, Integer rows, String orderBy, Order order, Double start, Double end) {
+    public List<Order> getAllOrders(Integer page, Integer rows, String orderBy, Order order, String userName, String start, String end) {
         if (null != page && null != rows) {
             PageHelper.startPage(page, rows);
         }
@@ -48,30 +57,190 @@ public class OrderServiceImpl implements OrderService {
         OrderExample orderExample = new OrderExample();
         OrderExample.Criteria criteria = orderExample.createCriteria();
 
-        // 订单金额在 [start, end] 之间
+        if (null != order.getOrderId()) {
+            criteria.andOrderIdEqualTo(order.getOrderId());
+        }
+
+        // 订单创建时间在 [start, end] 之间
         if (null != start && null != end) {
-            criteria.andAmountBetween(start, end);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date startTime;
+            Date endTime;
+
+            try {
+                startTime = sdf.parse(start);
+                endTime = sdf.parse(end);
+            } catch (ParseException e) {
+                startTime = null;
+                endTime = null;
+                e.printStackTrace();
+            }
+
+            if (null != startTime && null != endTime) {
+                criteria.andCreateTimeBetween(startTime, endTime);
+            }
         }
-        // 设置查询条件 userId
-        if (null != order.getUserId()) {
-            criteria.andUserIdEqualTo(order.getUserId());
+
+        // 根据用户名查询
+        if (null != userName) {
+            UserExample userExample = new UserExample();
+            UserExample.Criteria userCriteria = userExample.createCriteria();
+            userCriteria.andUserNameEqualTo(userName);
+            List<User> users = this.userMapper.selectByExample(userExample);
+
+            User user;
+            try {
+                user = users.get(0);
+                criteria.andUserIdEqualTo(user.getUserId());
+            } catch (Exception e) {
+                user = null;
+            }
         }
+
         // 设置查询条件 status
         if (null != order.getStatus()) {
             criteria.andStatusEqualTo(order.getStatus());
         }
 
+        orderExample.setOrderByClause("create_time desc");
         List<Order> orderList = this.orderMapper.selectByExample(orderExample);
+
+        for (Order temp: orderList) {
+            Address address = this.addressMapper.selectByPrimaryKey(temp.getAddressId());
+            temp.setAddress(address);
+
+//            OrderDetailExample orderDetailExample = new OrderDetailExample();
+//            OrderDetailExample.Criteria orderDetailCriteria = orderDetailExample.createCriteria();
+//            orderDetailCriteria.andOrderIdEqualTo(temp.getOrderId());
+
+            List<OrderDetail> orderDetails = this.orderDetailMapper.getAllByOrderId(temp.getOrderId());
+            temp.setOrderDetails(orderDetails);
+
+            System.out.println(temp);
+        }
 
         return orderList;
     }
 
     @Override
-    public ResultModel getOrderByUserId(Integer userId) {
+    public ResultModel orderStatistics() {
+        Integer orderWaiting = countWait();
+
+        Integer orderWaitingToday = countWaitToday();
+
+        Integer orderRefunding = countRefunding();
+
+        Integer orderSuccess = countSuccess();
+
+        Integer orderSuccessToday = countSuccessToday();
+
+        Integer orderDispatching = countDispatching();
+
+        StatisticsOrder statisticsOrder = new StatisticsOrder();
+        // 成交订单
+        statisticsOrder.setSuccess(orderSuccess);
+        // 今日成交
+        statisticsOrder.setSuccessToday(orderSuccessToday);
+        // 待发货
+        statisticsOrder.setWait(orderWaiting);
+        // 今日新增待发货
+        statisticsOrder.setWaitToday(orderWaitingToday);
+        // 配送中
+        statisticsOrder.setDispatching(orderDispatching);
+        // 待处理退款
+        statisticsOrder.setRefunding(orderRefunding);
+
+        return ResultModel.ok(statisticsOrder);
+    }
+
+    private Integer countDispatching() {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_DISPATCHING);
+        Integer count = this.orderMapper.countByExample(orderExample);
+        return count;
+    }
+
+    private Integer countWait() {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_WAIT);
+        Integer count = this.orderMapper.countByExample(orderExample);
+        return count;
+    }
+
+    private Integer countWaitToday() {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_WAIT);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date start = new Date();
+        Date end = new Date();
+
+        Date startTime;
+        try {
+            startTime = sdf.parse(sdf.format(start));
+        } catch (ParseException e) {
+            startTime = null;
+            e.printStackTrace();
+        }
+
+        criteria.andCreateTimeBetween(startTime, end);
+        Integer count = this.orderMapper.countByExample(orderExample);
+        return count;
+    }
+
+    private Integer countRefunding() {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_REFUNDING);
+        Integer count = this.orderMapper.countByExample(orderExample);
+        return count;
+    }
+
+    private Integer countSuccess() {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_FINISH);
+        Integer count = this.orderMapper.countByExample(orderExample);
+        return count;
+    }
+
+    private Integer countSuccessToday() {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_FINISH);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date start = new Date();
+        Date end = new Date();
+
+        Date startTime;
+        try {
+            startTime = sdf.parse(sdf.format(start));
+        } catch (ParseException e) {
+            startTime = null;
+            e.printStackTrace();
+        }
+
+        criteria.andCreateTimeBetween(startTime, end);
+        Integer count = this.orderMapper.countByExample(orderExample);
+        return count;
+    }
+
+    @Override
+    public ResultModel getOrderByUserId(Integer userId, Integer status) {
         OrderExample orderExample = new OrderExample();
         OrderExample.Criteria criteria = orderExample.createCriteria();
 
+        if (null != status) {
+            criteria.andStatusEqualTo(status);
+        }
+
         criteria.andUserIdEqualTo(userId);
+        orderExample.setOrderByClause("create_time DESC");
         List<Order> orders = this.orderMapper.selectByExample(orderExample);
 
         // 购物车详情
@@ -92,6 +261,11 @@ public class OrderServiceImpl implements OrderService {
         return ResultModel.ok(orders);
     }
 
+    /**
+     * 根据orderId获取order信息
+     * @param orderId
+     * @return
+     */
     @Override
     public ResultModel getOneOrder(Long orderId) {
         Order order = this.orderMapper.selectByPrimaryKey(orderId);
@@ -108,14 +282,27 @@ public class OrderServiceImpl implements OrderService {
      * @param userId
      * @param addressId
      * @param remarks
-     * @param cartDetailIds
+     * @param ids  购物车详情id
      * @return
      */
     @Override
-    public ResultModel create(Integer userId, Integer addressId, String remarks, Long cartDetailIds[]) {
-        Long cartId = cartDetailIds[0];
+    public ResultModel create(Integer userId, Integer addressId, String remarks, String ids) {
+        String[] str = ids.split(",");
+        int length = str.length;
+        Long[] cartDetailIds = new Long[length];
+        for (int i = 0; i < length ; i++) {
+            cartDetailIds[i] = Long.parseLong(str[i]);
+        }
+
+        Long oneCartDetailId = cartDetailIds[0];
         // 获取用户购物车
-        Cart userCart = this.cartMapper.selectByPrimaryKey(cartId);
+        CartDetail oneCartDetail = this.cartDetailMapper.selectByPrimaryKey(oneCartDetailId);
+        Cart userCart;
+        if (null != oneCartDetail) {
+            userCart = this.cartMapper.selectByPrimaryKey(oneCartDetail.getCartId());
+        } else {
+            userCart = new Cart();
+        }
 
         // 创建新订单
         Order order = new Order();
@@ -128,12 +315,14 @@ public class OrderServiceImpl implements OrderService {
         // 插入数据库
         this.orderMapper.insert(order);
         long orderId = order.getOrderId();
+        System.out.println(666);
 
         for(Long cartDetailId: cartDetailIds) {
             CartDetail cartDetail = this.cartDetailMapper.selectByPrimaryKey(cartDetailId);
             // 没有找到购物车
             if (null == cartDetail) {
-                // 创建购物车失败，删除已插入的购物车信息
+                System.out.println("meiyou");
+                // 创建订单失败，删除已插入的购物车信息
                 this.orderMapper.deleteByPrimaryKey(orderId);
                 return ResultModel.error(ResultStatus.CART_NOT_FOUND);
             }
@@ -201,6 +390,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setStatus(Constants.ORDER_REFUNDING);
+        this.orderMapper.updateByPrimaryKey(order);
 
         return ResultModel.ok();
     }
@@ -219,6 +409,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setStatus(Constants.ORDER_DISPATCHING);
+        this.orderMapper.updateByPrimaryKey(order);
 
         return ResultModel.ok();
     }
@@ -237,6 +428,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setStatus(Constants.ORDER_FINISH);
+        this.orderMapper.updateByPrimaryKey(order);
 
         return ResultModel.ok();
     }
@@ -255,6 +447,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setStatus(Constants.ORDER_REFUND_SUCCESS);
+        this.orderMapper.updateByPrimaryKey(order);
 
         // 查出购物车id对应的购物车详情信息
         OrderDetailExample orderDetailExample = new OrderDetailExample();
@@ -270,6 +463,8 @@ public class OrderServiceImpl implements OrderService {
             good.setInventory(good.getInventory() + count);
             // 更新商品销量
             good.setSoldCount(good.getSoldCount() - count);
+
+            this.goodMapper.updateByPrimaryKey(good);
         }
 
         return ResultModel.ok();
@@ -289,6 +484,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setStatus(Constants.ORDER_REFUNDING_FAILURE);
+        this.orderMapper.updateByPrimaryKey(order);
 
         return ResultModel.ok();
     }
