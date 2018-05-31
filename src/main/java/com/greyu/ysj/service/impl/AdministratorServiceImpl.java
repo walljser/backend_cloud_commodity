@@ -103,7 +103,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
         this.administratorMapper.insert(administrator);
-        return null;
+        return ResultModel.ok();
     }
 
     @Override

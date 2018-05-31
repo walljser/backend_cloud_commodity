@@ -37,6 +37,10 @@ public class AdvServiceImpl implements AdvService {
 
         List<AdvSwiper> advLists = this.advSwiperMapper.selectByExample(advSwiperExample);
 
+        for (AdvSwiper adv: advLists) {
+            adv.setImage(Constants.IMAGE_PREFIX_URL + adv.getImage());
+        }
+
         return ResultModel.ok(advLists);
     }
 
