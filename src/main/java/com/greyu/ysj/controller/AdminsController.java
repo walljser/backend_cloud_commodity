@@ -7,9 +7,7 @@ import com.greyu.ysj.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Description:
@@ -36,6 +34,42 @@ public class AdminsController {
 
         if (resultModel.getCode() == -1010) {
             return new ResponseEntity<ResultModel>(resultModel, HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/v1/admins", method = RequestMethod.POST)
+    @Authorization
+    public ResponseEntity<ResultModel> createNewAdmin(String userName, String passWord, String nickName, Long phone, Boolean superLevel) {
+        ResultModel resultModel = this.administratorService.create(userName, passWord, nickName, phone, superLevel);
+
+        if (resultModel.getCode() == -1004 || resultModel.getCode() == -1005) {
+            return new ResponseEntity<ResultModel>(resultModel, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/v1/admins/{adminId}", method = RequestMethod.POST)
+    @Authorization
+    public ResponseEntity<ResultModel> updateByAdminId(@PathVariable Integer adminId, String passWord, String nickName, Long phone, Boolean superLevel) {
+        ResultModel resultModel = this.administratorService.update(adminId, passWord, nickName, phone, superLevel);
+
+        if (resultModel.getCode() == -1002) {
+            return new ResponseEntity<ResultModel>(resultModel, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/v1/admins/{adminId}", method = RequestMethod.DELETE)
+    @Authorization
+    public ResponseEntity<ResultModel> deleteByAdminId(@PathVariable Integer adminId) {
+        ResultModel resultModel = this.administratorService.delete(adminId);
+
+        if (resultModel.getCode() == -1002) {
+            return new ResponseEntity<ResultModel>(resultModel, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);

@@ -131,8 +131,9 @@ CREATE TABLE `tb_order_detail` (
 DROP TABLE IF EXISTS `tb_adv_swiper`;
 CREATE TABLE `tb_adv_swiper` (
   `adv_swiper_id` int(4) NOT NULL AUTO_INCREMENT,
+  `category_second_id` int(6) NOT NULL,
+  `category_name` varchar(10) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `order` int(2) NOT NULL,
   `image` varchar(100) NOT NULL,
   PRIMARY KEY (`adv_swiper_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;

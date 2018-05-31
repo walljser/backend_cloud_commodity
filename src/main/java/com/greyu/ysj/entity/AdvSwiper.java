@@ -3,9 +3,11 @@ package com.greyu.ysj.entity;
 public class AdvSwiper {
     private Integer advSwiperId;
 
-    private String name;
+    private Integer categorySecondId;
 
-    private Integer order;
+    private String categoryName;
+
+    private String name;
 
     private String image;
 
@@ -17,20 +19,28 @@ public class AdvSwiper {
         this.advSwiperId = advSwiperId;
     }
 
+    public Integer getCategorySecondId() {
+        return categorySecondId;
+    }
+
+    public void setCategorySecondId(Integer categorySecondId) {
+        this.categorySecondId = categorySecondId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName == null ? null : categoryName.trim();
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public Integer getOrder() {
-        return order;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
     }
 
     public String getImage() {

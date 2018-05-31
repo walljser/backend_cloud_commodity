@@ -3,8 +3,9 @@
 <mapper namespace="com.greyu.ysj.mapper.AdvSwiperMapper" >
   <resultMap id="BaseResultMap" type="com.greyu.ysj.entity.AdvSwiper" >
     <id column="adv_swiper_id" property="advSwiperId" jdbcType="INTEGER" />
+    <result column="category_second_id" property="categorySecondId" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="order" property="order" jdbcType="INTEGER" />
     <result column="image" property="image" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    adv_swiper_id, name, order, image
+    adv_swiper_id, category_second_id, category_name, name, image
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.greyu.ysj.entity.AdvSwiperExample" >
     select
@@ -99,10 +100,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.greyu.ysj.entity.AdvSwiper" >
-    insert into tb_adv_swiper (adv_swiper_id, name, order, 
-      image)
-    values (#{advSwiperId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
-      #{image,jdbcType=VARCHAR})
+    insert into tb_adv_swiper (adv_swiper_id, category_second_id, category_name, 
+      name, image)
+    values (#{advSwiperId,jdbcType=INTEGER}, #{categorySecondId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.greyu.ysj.entity.AdvSwiper" >
     insert into tb_adv_swiper
@@ -110,11 +111,14 @@
       <if test="advSwiperId != null" >
         adv_swiper_id,
       </if>
+      <if test="categorySecondId != null" >
+        category_second_id,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
       <if test="name != null" >
         name,
-      </if>
-      <if test="order != null" >
-        order,
       </if>
       <if test="image != null" >
         image,
@@ -124,11 +128,14 @@
       <if test="advSwiperId != null" >
         #{advSwiperId,jdbcType=INTEGER},
       </if>
+      <if test="categorySecondId != null" >
+        #{categorySecondId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null" >
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="order != null" >
-        #{order,jdbcType=INTEGER},
       </if>
       <if test="image != null" >
         #{image,jdbcType=VARCHAR},
@@ -147,11 +154,14 @@
       <if test="record.advSwiperId != null" >
         adv_swiper_id = #{record.advSwiperId,jdbcType=INTEGER},
       </if>
+      <if test="record.categorySecondId != null" >
+        category_second_id = #{record.categorySecondId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryName != null" >
+        category_name = #{record.categoryName,jdbcType=VARCHAR},
+      </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.order != null" >
-        order = #{record.order,jdbcType=INTEGER},
       </if>
       <if test="record.image != null" >
         image = #{record.image,jdbcType=VARCHAR},
@@ -164,8 +174,9 @@
   <update id="updateByExample" parameterType="map" >
     update tb_adv_swiper
     set adv_swiper_id = #{record.advSwiperId,jdbcType=INTEGER},
+      category_second_id = #{record.categorySecondId,jdbcType=INTEGER},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      order = #{record.order,jdbcType=INTEGER},
       image = #{record.image,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -174,11 +185,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.greyu.ysj.entity.AdvSwiper" >
     update tb_adv_swiper
     <set >
+      <if test="categorySecondId != null" >
+        category_second_id = #{categorySecondId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="order != null" >
-        order = #{order,jdbcType=INTEGER},
       </if>
       <if test="image != null" >
         image = #{image,jdbcType=VARCHAR},
@@ -188,8 +202,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.greyu.ysj.entity.AdvSwiper" >
     update tb_adv_swiper
-    set name = #{name,jdbcType=VARCHAR},
-      order = #{order,jdbcType=INTEGER},
+    set category_second_id = #{categorySecondId,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       image = #{image,jdbcType=VARCHAR}
     where adv_swiper_id = #{advSwiperId,jdbcType=INTEGER}
   </update>

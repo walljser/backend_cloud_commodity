@@ -26,7 +26,8 @@ public enum ResultStatus {
     GOOD_NOT_LESS_THEN_ZERO(-1004, "添加的商品数量必须大于零"),
     CART_NOT_FOUND(-1002, "购物车不存在"),
     USER_NOT_ALLOWED(-1010, "没有操作权限"),
-    IMAGE_NOT_EMPTY(-1004, "图片不能为空");
+    IMAGE_NOT_EMPTY(-1004, "图片不能为空"),
+    ADV_NOT_FOUND(-1002, "广告不存在");
 
     /**
      * 返回码

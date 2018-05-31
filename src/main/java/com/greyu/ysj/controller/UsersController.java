@@ -70,7 +70,7 @@ public class UsersController {
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/user/v1/user/{userId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/user/v1/user/{userId}", method = RequestMethod.POST)
     @Authorization
     public ResponseEntity<ResultModel> updateUser(@PathVariable Integer userId, User user) {
         ResultModel resultModel = this.userService.updateUser(userId, user);

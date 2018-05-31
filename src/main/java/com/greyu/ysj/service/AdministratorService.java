@@ -12,4 +12,10 @@ public interface AdministratorService {
     Administrator selectByUserName(String username);
 
     ResultModel getAllAdmins(int adminId);
+
+    ResultModel create(String userName, String passWord, String nickName, Long phone, Boolean superLevel);
+
+    ResultModel update(Integer adminId, String passWord, String nickName, Long phone, Boolean superLevel);
+
+    ResultModel delete(Integer adminId);
 }

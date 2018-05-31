@@ -77,10 +77,6 @@ public class CategorySecondController {
     @RequestMapping(value = "/admin/v1/category/second/{categorySecondId}", method = RequestMethod.POST)
     @Authorization
     public ResponseEntity<ResultModel> updateCategory(@PathVariable Integer categorySecondId, Integer categoryFirstId, String categoryName, MultipartFile imageFile) {
-        System.out.println(categoryFirstId);
-        System.out.println(categorySecondId);
-        System.out.println(categoryName);
-        System.out.println(imageFile);
         if (null == categoryName ||
                 null == categoryFirstId) {
             return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.DATA_NOT_NULL), HttpStatus.BAD_REQUEST);
