@@ -123,6 +123,10 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
     }
 
+    /**
+     * 获取订单资讯
+     * @return
+     */
     @Override
     public ResultModel orderStatistics() {
         Integer orderWaiting = countWait();
@@ -136,6 +140,14 @@ public class OrderServiceImpl implements OrderService {
         Integer orderSuccessToday = countSuccessToday();
 
         Integer orderDispatching = countDispatching();
+
+        Double totalSale = countTotalSale();
+
+        Double todaySale = countTodaySale();
+
+        Integer collection = countCollection();
+
+        Integer userCount = countUserCount();
 
         StatisticsOrder statisticsOrder = new StatisticsOrder();
         // 成交订单
@@ -151,7 +163,78 @@ public class OrderServiceImpl implements OrderService {
         // 待处理退款
         statisticsOrder.setRefunding(orderRefunding);
 
+        // 总销售额
+        statisticsOrder.setTotalSale(totalSale);
+
+        // 今日销售额
+        statisticsOrder.setTodaySale(todaySale);
+
+        // 收藏数量
+        statisticsOrder.setCollection(collection);
+
+        // 用户数量
+        statisticsOrder.setUserCount(userCount);
+
         return ResultModel.ok(statisticsOrder);
+    }
+
+    private Integer countUserCount() {
+        UserExample userExample = new UserExample();
+        Integer userCount = this.userMapper.countByExample(userExample);
+
+        return userCount;
+    }
+
+    private Integer countCollection() {
+        CartDetailExample cartExample = new CartDetailExample();
+        CartDetailExample.Criteria criteria = cartExample.createCriteria();
+        Integer collection = this.cartDetailMapper.countByExample(cartExample);
+
+        return collection;
+    }
+
+    private Double countTotalSale() {
+        Double totalSale = 0.0;
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_FINISH);
+
+        List<Order> lists = this.orderMapper.selectByExample(orderExample);
+
+        for (Order order: lists) {
+            totalSale = totalSale + order.getAmount();
+        }
+
+        return totalSale;
+    }
+
+    private Double countTodaySale() {
+        Double totalSale = 0.0;
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andStatusEqualTo(Constants.ORDER_FINISH);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date start = new Date();
+        Date end = new Date();
+
+        Date startTime;
+        try {
+            startTime = sdf.parse(sdf.format(start));
+        } catch (ParseException e) {
+            startTime = null;
+            e.printStackTrace();
+        }
+
+        criteria.andCreateTimeBetween(startTime, end);
+
+        List<Order> lists = this.orderMapper.selectByExample(orderExample);
+
+        for (Order order: lists) {
+            totalSale += order.getAmount();
+        }
+
+        return totalSale;
     }
 
     private Integer countDispatching() {

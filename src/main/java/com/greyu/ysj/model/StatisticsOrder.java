@@ -20,6 +20,46 @@ public class StatisticsOrder {
 
     private Integer refunding;
 
+    private Double totalSale;
+
+    private Double todaySale;
+
+    private Integer collection;
+
+    private Integer userCount;
+
+    public Integer getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
+    }
+
+    public Integer getCollection() {
+        return collection;
+    }
+
+    public void setCollection(Integer collection) {
+        this.collection = collection;
+    }
+
+    public Double getTotalSale() {
+        return totalSale;
+    }
+
+    public void setTotalSale(Double totalSale) {
+        this.totalSale = totalSale;
+    }
+
+    public Double getTodaySale() {
+        return todaySale;
+    }
+
+    public void setTodaySale(Double todaySale) {
+        this.todaySale = todaySale;
+    }
+
     public Integer getSuccessToday() {
         return successToday;
     }

@@ -37,10 +37,13 @@ public class OrderController {
         return new ResponseEntity<ResultModel>(ResultModel.ok(orders),HttpStatus.OK);
     }
 
+    /**
+     * 获取订单资讯
+     * @return
+     */
     @RequestMapping(value = "/admin/v1/statistics/order", method = RequestMethod.GET)
     @Authorization
     public ResponseEntity<ResultModel> orderCount() {
-        System.out.println(6666);
         ResultModel resultModel = this.orderService.orderStatistics();
         return new ResponseEntity<ResultModel>(resultModel, HttpStatus.OK);
     }
